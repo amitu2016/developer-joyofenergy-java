@@ -27,6 +27,10 @@ public class PricePlanComparatorControllerTest {
     private MeterReadingService meterReadingService;
     private AccountService accountService;
 
+    /**
+     * Sets up the test environment before each test execution.
+     * Initializes the necessary services and controller for price plan comparison tests.
+     */
     @BeforeEach
     public void setUp() {
         meterReadingService = new MeterReadingService(new HashMap<>());
@@ -42,6 +46,10 @@ public class PricePlanComparatorControllerTest {
         controller = new PricePlanComparatorController(pricePlanService, accountService);
     }
 
+    /**
+     * Tests the happy path scenario for calculating costs for each price plan.
+     * Verifies that the correct costs are calculated and returned for the given meter readings.
+     */
     @Test
     public void calculatedCostForEachPricePlan_happyPath() {
         var electricityReading = new ElectricityReading(Instant.now().minusSeconds(3600), BigDecimal.valueOf(15.0));
@@ -62,6 +70,10 @@ public class PricePlanComparatorControllerTest {
         assertThat(response.getBody()).isEqualTo(expected);
     }
 
+    /**
+     * Tests the scenario where no readings are found for a given meter ID.
+     * Expects a NOT_FOUND status to be returned.
+     */
     @Test
     public void calculatedCostForEachPricePlan_noReadings() {
         ResponseEntity<Map<String, Object>> response = controller.calculatedCostForEachPricePlan("not-found");
@@ -69,6 +81,10 @@ public class PricePlanComparatorControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Tests recommending the cheapest price plans without a limit.
+     * Verifies that all price plans are returned in the correct order of cost.
+     */
     @Test
     public void recommendCheapestPricePlans_noLimit() {
         var electricityReading = new ElectricityReading(Instant.now().minusSeconds(1800), BigDecimal.valueOf(35.0));
@@ -86,6 +102,10 @@ public class PricePlanComparatorControllerTest {
         assertThat(response.getBody()).isEqualTo(expectedPricePlanToCost);
     }
 
+    /**
+     * Tests recommending the cheapest price plans with a specified limit.
+     * Verifies that only the specified number of cheapest plans are returned.
+     */
     @Test
     public void recommendCheapestPricePlans_withLimit() {
         var electricityReading = new ElectricityReading(Instant.now().minusSeconds(2700), BigDecimal.valueOf(5.0));
@@ -101,6 +121,10 @@ public class PricePlanComparatorControllerTest {
         assertThat(response.getBody()).isEqualTo(expectedPricePlanToCost);
     }
 
+    /**
+     * Tests recommending the cheapest price plans when the limit is higher than the number of available plans.
+     * Verifies that all available plans are returned in the correct order.
+     */
     @Test
     public void recommendCheapestPricePlans_limitHigherThanNumberOfEntries() {
         var reading0 = new ElectricityReading(Instant.now().minusSeconds(3600), BigDecimal.valueOf(25.0));

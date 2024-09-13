@@ -10,12 +10,17 @@ import java.util.Random;
 import uk.tw.energy.domain.ElectricityReading;
 
 public class ElectricityReadingsGenerator {
-
+    /**
+     * Generates a list of random electricity readings.
+     *
+     * @param number The number of readings to generate
+     * @return A list of ElectricityReading objects sorted by time
+     */
     public List<ElectricityReading> generate(int number) {
         List<ElectricityReading> readings = new ArrayList<>();
         Instant now = Instant.now();
-
         Random readingRandomiser = new Random();
+
         for (int i = 0; i < number; i++) {
             double positiveRandomValue = Math.abs(readingRandomiser.nextGaussian());
             BigDecimal randomReading = BigDecimal.valueOf(positiveRandomValue).setScale(4, RoundingMode.CEILING);

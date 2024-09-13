@@ -19,11 +19,19 @@ public class MeterReadingServiceTest {
 
     @Test
     public void givenMeterIdThatDoesNotExistShouldReturnNull() {
+        // Test behavior when requesting readings for a non-existent meter ID
+        // Given: An unknown meter ID
+        // When: Requesting readings for that ID
+        // Then: An empty Optional should be returned
         assertThat(meterReadingService.getReadings("unknown-id")).isEqualTo(Optional.empty());
     }
 
     @Test
     public void givenMeterReadingThatExistsShouldReturnMeterReadings() {
+        // Test retrieval of stored meter readings
+        // Given: A meter ID with stored readings (empty list in this case)
+        // When: Requesting readings for that meter ID
+        // Then: The stored readings (empty list) should be returned wrapped in
         meterReadingService.storeReadings("random-id", new ArrayList<>());
         assertThat(meterReadingService.getReadings("random-id")).isEqualTo(Optional.of(new ArrayList<>()));
     }

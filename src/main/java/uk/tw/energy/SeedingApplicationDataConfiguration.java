@@ -17,13 +17,20 @@ import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
 import uk.tw.energy.generator.ElectricityReadingsGenerator;
 
+/**
+ * Configuration class for seeding application data.
+ */
 @Configuration
 public class SeedingApplicationDataConfiguration {
-
     private static final String MOST_EVIL_PRICE_PLAN_ID = "price-plan-0";
     private static final String RENEWABLES_PRICE_PLAN_ID = "price-plan-1";
     private static final String STANDARD_PRICE_PLAN_ID = "price-plan-2";
 
+    /**
+     * Creates a list of price plans.
+     *
+     * @return A list of PricePlan objects
+     */
     @Bean
     public List<PricePlan> pricePlans() {
         final List<PricePlan> pricePlans = new ArrayList<>();
@@ -33,6 +40,11 @@ public class SeedingApplicationDataConfiguration {
         return pricePlans;
     }
 
+    /**
+     * Creates a map of electricity readings for each smart meter.
+     *
+     * @return A map of smart meter IDs to lists of ElectricityReading objects
+     */
     @Bean
     public Map<String, List<ElectricityReading>> perMeterElectricityReadings() {
         final Map<String, List<ElectricityReading>> readings = new HashMap<>();
@@ -43,6 +55,11 @@ public class SeedingApplicationDataConfiguration {
         return readings;
     }
 
+    /**
+     * Creates a map of smart meter IDs to price plan IDs.
+     *
+     * @return A map of smart meter IDs to price plan IDs
+     */
     @Bean
     public Map<String, String> smartMeterToPricePlanAccounts() {
         final Map<String, String> smartMeterToPricePlanAccounts = new HashMap<>();
@@ -54,6 +71,12 @@ public class SeedingApplicationDataConfiguration {
         return smartMeterToPricePlanAccounts;
     }
 
+    /**
+     * Configures the ObjectMapper for JSON serialization.
+     *
+     * @param builder The Jackson2ObjectMapperBuilder
+     * @return A configured ObjectMapper
+     */
     @Bean
     @Primary
     public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {

@@ -17,13 +17,18 @@ import uk.tw.energy.service.MeterReadingService;
 @RestController
 @RequestMapping("/readings")
 public class MeterReadingController {
-
     private final MeterReadingService meterReadingService;
 
     public MeterReadingController(MeterReadingService meterReadingService) {
         this.meterReadingService = meterReadingService;
     }
 
+    /**
+     * Stores meter readings for a smart meter.
+     *
+     * @param meterReadings The meter readings to be stored
+     * @return ResponseEntity with HTTP status 200 if successful, 500 if invalid input
+     */
     @PostMapping("/store")
     public ResponseEntity storeReadings(@RequestBody MeterReadings meterReadings) {
         if (!isMeterReadingsValid(meterReadings)) {
@@ -33,6 +38,12 @@ public class MeterReadingController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Validates the meter readings input.
+     *
+     * @param meterReadings The meter readings to be validated
+     * @return true if the input is valid, false otherwise
+     */
     private boolean isMeterReadingsValid(MeterReadings meterReadings) {
         String smartMeterId = meterReadings.smartMeterId();
         List<ElectricityReading> electricityReadings = meterReadings.electricityReadings();
@@ -42,8 +53,14 @@ public class MeterReadingController {
                 && !electricityReadings.isEmpty();
     }
 
+    /**
+     * Retrieves meter readings for a specific smart meter.
+     *
+     * @param smartMeterId The ID of the smart meter
+     * @return ResponseEntity with the readings if found, or 404 if not found
+     */
     @GetMapping("/read/{smartMeterId}")
-    public ResponseEntity readReadings(@PathVariable String smartMeterId) {
+    public ResponseEntity<List<ElectricityReading>> readReadings(@PathVariable String smartMeterId) {
         Optional<List<ElectricityReading>> readings = meterReadingService.getReadings(smartMeterId);
         return readings.isPresent()
                 ? ResponseEntity.ok(readings.get())

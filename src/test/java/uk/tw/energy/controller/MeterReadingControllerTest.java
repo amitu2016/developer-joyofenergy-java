@@ -20,12 +20,20 @@ public class MeterReadingControllerTest {
     private MeterReadingController meterReadingController;
     private MeterReadingService meterReadingService;
 
+    /**
+     * Sets up the test environment before each test execution.
+     * Initializes the MeterReadingService and MeterReadingController instances.
+     */
     @BeforeEach
     public void setUp() {
         this.meterReadingService = new MeterReadingService(new HashMap<>());
         this.meterReadingController = new MeterReadingController(meterReadingService);
     }
 
+    /**
+     * Tests that storing meter readings without a meter ID returns an error response.
+     * Expects the controller to respond with an HTTP status of INTERNAL_SERVER_ERROR.
+     */
     @Test
     public void givenNoMeterIdIsSuppliedWhenStoringShouldReturnErrorResponse() {
         MeterReadings meterReadings = new MeterReadings(null, Collections.emptyList());
@@ -33,6 +41,10 @@ public class MeterReadingControllerTest {
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Tests that storing empty meter readings returns an error response.
+     * Expects the controller to respond with an HTTP status of INTERNAL_SERVER_ERROR.
+     */
     @Test
     public void givenEmptyMeterReadingShouldReturnErrorResponse() {
         MeterReadings meterReadings = new MeterReadings(SMART_METER_ID, Collections.emptyList());
@@ -40,6 +52,10 @@ public class MeterReadingControllerTest {
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Tests that storing null readings with a valid meter ID returns an error response.
+     * Expects the controller to respond with an HTTP status of INTERNAL_SERVER_ERROR.
+     */
     @Test
     public void givenNullReadingsAreSuppliedWhenStoringShouldReturnErrorResponse() {
         MeterReadings meterReadings = new MeterReadings(SMART_METER_ID, null);
@@ -47,6 +63,10 @@ public class MeterReadingControllerTest {
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Tests that multiple batches of meter readings are stored correctly.
+     * Verifies that all readings are stored and can be retrieved for the given meter ID.
+     */
     @Test
     public void givenMultipleBatchesOfMeterReadingsShouldStore() {
         MeterReadings meterReadings = new MeterReadingsBuilder()
@@ -69,6 +89,10 @@ public class MeterReadingControllerTest {
         assertThat(meterReadingService.getReadings(SMART_METER_ID).get()).isEqualTo(expectedElectricityReadings);
     }
 
+    /**
+     * Tests that meter readings are stored and associated with the correct user.
+     * Verifies that readings for different meter IDs are stored separately.
+     */
     @Test
     public void givenMeterReadingsAssociatedWithTheUserShouldStoreAssociatedWithUser() {
         MeterReadings meterReadings = new MeterReadingsBuilder()
@@ -88,6 +112,9 @@ public class MeterReadingControllerTest {
                 .isEqualTo(meterReadings.electricityReadings());
     }
 
+    /**
+     * Tests that attempting to read readings for an unrecognized meter ID returns a NOT_FOUND status.
+     */
     @Test
     public void givenMeterIdThatIsNotRecognisedShouldReturnNotFound() {
         assertThat(meterReadingController.readReadings(SMART_METER_ID).getStatusCode())

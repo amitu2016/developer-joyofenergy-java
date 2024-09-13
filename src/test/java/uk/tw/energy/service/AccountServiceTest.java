@@ -24,6 +24,10 @@ public class AccountServiceTest {
 
     @Test
     public void givenTheSmartMeterIdReturnsThePricePlanId() throws Exception {
+        // Test that the correct price plan ID is returned for a given smart meter ID
+        // Given: A smart meter ID that exists in the system
+        // When: Requesting the price plan ID for that smart meter
+        // Then: The correct price plan ID should be returned
         assertThat(accountService.getPricePlanIdForSmartMeterId(SMART_METER_ID)).isEqualTo(PRICE_PLAN_ID);
     }
 }

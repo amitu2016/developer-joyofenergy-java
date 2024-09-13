@@ -18,6 +18,7 @@ public class PricePlanTest {
 
     @Test
     public void shouldReturnTheEnergySupplierGivenInTheConstructor() {
+        // Test to ensure that the PricePlan correctly stores and returns the energy supplier name
         PricePlan pricePlan = new PricePlan(null, ENERGY_SUPPLIER_NAME, null, null);
 
         assertThat(pricePlan.getEnergySupplier()).isEqualTo(ENERGY_SUPPLIER_NAME);
@@ -25,6 +26,7 @@ public class PricePlanTest {
 
     @Test
     public void shouldReturnTheBasePriceGivenAnOrdinaryDateTime() throws Exception {
+        // Test to verify that the PricePlan returns the base price for a non-peak time
         LocalDateTime normalDateTime = LocalDateTime.of(2017, Month.AUGUST, 31, 12, 0, 0);
         PricePlan.PeakTimeMultiplier peakTimeMultiplier =
                 new PricePlan.PeakTimeMultiplier(DayOfWeek.WEDNESDAY, BigDecimal.TEN);
@@ -37,6 +39,7 @@ public class PricePlanTest {
 
     @Test
     public void shouldReturnAnExceptionPriceGivenExceptionalDateTime() throws Exception {
+        // Test to ensure that the PricePlan returns the peak price for a specified peak time
         LocalDateTime exceptionalDateTime = LocalDateTime.of(2017, Month.AUGUST, 30, 23, 0, 0);
         PricePlan.PeakTimeMultiplier peakTimeMultiplier =
                 new PricePlan.PeakTimeMultiplier(DayOfWeek.WEDNESDAY, BigDecimal.TEN);
@@ -49,6 +52,7 @@ public class PricePlanTest {
 
     @Test
     public void shouldReceiveMultipleExceptionalDateTimes() throws Exception {
+        // Test to verify that the PricePlan can handle multiple peak time multipliers
         LocalDateTime exceptionalDateTime = LocalDateTime.of(2017, Month.AUGUST, 30, 23, 0, 0);
         PricePlan.PeakTimeMultiplier peakTimeMultiplier =
                 new PricePlan.PeakTimeMultiplier(DayOfWeek.WEDNESDAY, BigDecimal.TEN);
